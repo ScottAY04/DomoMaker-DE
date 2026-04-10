@@ -18,7 +18,7 @@ const handleLogin = (e) => {
     return false;
 }
 
-//handles the signup
+//handles the signup for the app
 const handleSignup = (e) => {
     e.preventDefault();
     helper.hideError();
