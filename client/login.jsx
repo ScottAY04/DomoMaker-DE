@@ -18,6 +18,7 @@ const handleLogin = (e) => {
     return false;
 }
 
+//handles the signup
 const handleSignup = (e) => {
     e.preventDefault();
     helper.hideError();
@@ -41,6 +42,7 @@ const handleSignup = (e) => {
     return false;
 }
 
+//login window
 const LoginWindow = (props) => {
     return(
         <form id="loginForm"
