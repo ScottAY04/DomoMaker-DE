@@ -9,16 +9,25 @@ const DomoSchema = new mongoose.Schema({
         required: true,
         trim: true,
         set: setName,
+        get: (value) => {
+            return value;
+        }
     },
     age: {
         type: Number,
         min: 0,
         required: true,
+        get: (value) => {
+            return value;
+        }
     },
     height: {
         type: Number,
         min: 0,
         required: true,
+        get: (value) => {
+            return value;
+        }
     },
     owner: {
         type: mongoose.Schema.ObjectId,

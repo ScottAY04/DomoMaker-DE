@@ -31,6 +31,59 @@ const makeDomo = async (req, res) => {
    }
 }
 
+const changeDomo = async (req, res) => {
+    if(!req.body.name){
+        return res.status(400).json({ error: 'Name required!'});
+   }
+
+   if(!req.body.newAge && !req.body.newHeight){
+        return res.status(400).json({ error: 'Age or height required!'});
+   }
+
+   //makes the new data
+    const newData = {
+    name: req.body.name,
+    age: req.body.newAge,
+    height: req.body.newHeight,
+    owner: req.session.account._id,
+   };
+
+   const query = {owner: req.session.account._id};
+   const oldDocs = await Domo.find(query).find( {name: newData.name}).select('name age height');
+   
+   //if the name doesn't exist returns an error
+   if(newData.name !== oldDocs[0].name){
+        return res.status(400).json({error: "Name doesn't exists"});
+   }
+
+   //if either age or height is null it puts in the old value
+   if(!newData.age){
+    newData.age = oldDocs[0].age;
+   }
+
+   if(!newData.height){
+    newData.height = oldDocs[0].height;
+   }
+
+   try{
+    await Domo.updateOne(
+        {
+            name: newData.name,
+            owner: newData.owner,
+        },
+        {$set: {
+            age: newData.age,
+            height: newData.height,
+        }}
+    );
+
+    return res.status(201).json({name: newData.name, age: newData.age, height: newData.height});
+   }catch(err){
+    console.log(err);
+    return res.status(500).json({ error: 'An error has occured changing the domo!'});
+   }
+}
+
 const getDomos = async (req, res) => {
     try{
         const query = {owner: req.session.account._id};
@@ -46,5 +99,6 @@ const getDomos = async (req, res) => {
 module.exports = {
     makerPage,
     makeDomo,
-    getDomos
+    getDomos,
+    changeDomo
 }
